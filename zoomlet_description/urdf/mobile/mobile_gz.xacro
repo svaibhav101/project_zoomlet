@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <xacro:macro name="wheel_gazebo" params="link_name">
+        <gazebo reference="${link_name}">
+            <!--
+            Commented parameters represent typical realistic values.
+            These were replaced with extremely large values to
+            increase friction and reduce wheel slipping.
+            -->
+            <!-- <mu1>1.0</mu1>
+            <mu2>1.0</mu2>
+            <kp>100000.0</kp>
+            <kd>1.0</kd>
+            <minDepth>0.001</minDepth>
+            <maxVel>0.1</maxVel>
+            <fdir1>1 0 0</fdir1> -->
+
+
+            <!-- Friction coefficient in primary direction -->
+            <mu1>100000000000000.0</mu1>
+
+            <!-- Friction coefficient in secondary direction -->
+            <mu2>100000000000000.0</mu2>
+
+            <!-- Contact stiffness -->
+            <kp>1000000000000.0</kp>
+
+            <!-- Contact damping -->
+            <kd>10</kd>
+
+            <!-- Minimum penetration depth before contact is resolved -->
+            <minDepth>0.001</minDepth>
+
+            <!-- Maximum contact correction velocity -->
+            <maxVel>0.1</maxVel>
+
+            <!-- Friction direction -->
+            <fdir1>1 0 0 </fdir1>
+
+        </gazebo>
+    </xacro:macro>
+
+
+    <!-- ================================================= -->
+    <!-- Macro: Caster Wheel Gazebo Properties -->
+    <!-- ================================================= -->
+
+    <!--
+    This macro defines physics properties for caster wheels.
+    Caster wheels typically have lower friction so they
+    rotate freely and support the robot.
+    -->
+    <xacro:macro name="caster_gazebo" params="link_name">
+        <gazebo reference="${link_name}">
+
+            <!-- Typical realistic values (commented out) -->
+
+            <!-- <mu1>0.1</mu1>
+            <mu2>0.1</mu2>
+            <kp>100000.0</kp>
+            <kd>10.0</kd>
+            <minDepth>0.001</minDepth>
+            <maxVel>0.1</maxVel> -->
+
+            <!-- Low friction for caster wheels -->
+            <mu1>0.1</mu1>
+            <mu2>0.1</mu2>
+
+            <!-- Contact stiffness -->
+            <kp>1000000.0</kp>
+
+            <!-- Contact damping -->
+            <kd>100</kd>
+
+            <!-- Minimum penetration depth -->
+            <minDepth>0.001</minDepth>
+
+            <!-- Maximum correction velocity -->
+            <maxVel>0.1</maxVel>
+
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:wheel_gazebo link_name="left_wheel_link" />
+    <xacro:wheel_gazebo link_name="right_wheel_link" />
+
+    <xacro:caster_gazebo link_name="caster_wheel_link" />
+
+    <gazebo>
+        <!-- HUMBLE -->
+        <xacro:if value="$(arg is_ignition)">
+
+            <plugin filename="gz_ros2_control-system"
+                name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <ros>
+                    <namespace>$(arg namespace)</namespace>
+                    <remapping>/tf:=tf</remapping>
+                    <remapping>/tf_static:=tf_static</remapping>
+                </ros>
+                <!-- Controller configuration file -->
+                <parameters>$(find zoomlet_controller)/config/zoomlet_controllers.yaml</parameters>
+            </plugin>
+
+        </xacro:if>
+
+        <!-- JAZZY -->
+        <xacro:unless value="$(arg is_ignition)">
+            <plugin filename="gz_ros2_control-system"
+                name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <ros>
+                    <namespace>$(arg namespace)</namespace>
+                    <remapping>/tf:=tf</remapping>
+                    <remapping>/tf_static:=tf_static</remapping>
+                </ros>
+                <!-- Controller configuration file -->
+                <parameters>$(find zoomlet_controller)/config/zoomlet_controllers.yaml</parameters>
+            </plugin>
+
+        </xacro:unless>
+    </gazebo>
+
+
+</robot>

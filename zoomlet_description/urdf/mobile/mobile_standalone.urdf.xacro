@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<robot name="zoomlet" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:arg name="is_ignition" default="true" />
+    <xacro:arg name="namespace" default="" />
+
+    <!-- Include all xacro modules -->
+    <xacro:include filename="$(find zoomlet_description)/urdf/materials.xacro" />
+    <xacro:include filename="$(find zoomlet_description)/urdf/properties.xacro" />
+    <xacro:include filename="$(find zoomlet_description)/urdf/mobile/mobile_base.xacro" />
+    <xacro:include filename="$(find zoomlet_description)/urdf/mobile/mobile_gz.xacro" />
+    <xacro:include filename="$(find zoomlet_description)/urdf/mobile/mobile_ros2ctrl.xacro" />
+
+
+    <!-- Base footprint -->
+    <link name="base_footprint" />
+
+    <!-- Base joint -->
+    <joint name="base_joint" type="fixed">
+        <parent link="base_footprint" />
+        <child link="base_link" />
+        <origin xyz="0.0 0.0 ${WHEEL_RADIUS}" rpy="0.0 0.0 0.0" />
+    </joint>
+
+</robot>

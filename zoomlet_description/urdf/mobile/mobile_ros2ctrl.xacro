@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <!-- ===================================================== -->
+    <!-- Macro: Wheel Joint Control -->
+    <!-- ===================================================== -->
+
+    <!--
+    This macro defines the control interfaces for a wheel joint.
+    It avoids repeating the same configuration for multiple wheels.
+    The parameter 'joint_name' allows the macro to be reused.
+    -->
+    <xacro:macro name="wheel_joint_control" params="joint_name">
+        <!-- Define a joint controller entry -->
+        <joint name="${joint_name}">
+
+            <!--
+            Command interface:
+            Defines what type of command the controller can send.
+            In this case: velocity control.
+            -->
+            <command_interface name="velocity">
+                <param name="min">-1</param> <!-- wheel velocity (rad/s) -->
+                <param name="max">1</param> <!-- wheel velocity (rad/s) -->
+            </command_interface>
+
+            <!--
+            State interfaces:
+            These values are reported back from the simulator/hardware.
+            -->
+
+            <!-- Joint position (wheel angle) -->
+            <state_interface name="position" />
+
+            <!-- Joint velocity -->
+            <state_interface name="velocity" />
+        </joint>
+    </xacro:macro>
+
+    <!-- ===================================================== -->
+    <!-- ROS2 Control System -->
+    <!-- ===================================================== -->
+
+    <!--
+    Defines the ROS2 Control hardware system.
+    type="system" means it manages multiple joints together.
+    -->
+    <ros2_control name="RobotSystem" type="system">
+        <!-- HUMBLE -->
+        <xacro:if value="$(arg is_ignition)">
+            <hardware>
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+            </hardware>
+        </xacro:if>
+
+        <!-- JAZZY -->
+        <xacro:unless value="$(arg is_ignition)">
+            <hardware>
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+            </hardware>
+        </xacro:unless>
+
+
+        <xacro:wheel_joint_control joint_name="base_left_wheel_joint" />
+        <xacro:wheel_joint_control joint_name="base_right_wheel_joint" />
+
+    </ros2_control>
+
+
+</robot>

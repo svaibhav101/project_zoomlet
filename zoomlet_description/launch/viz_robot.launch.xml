@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+    <arg name="namespace1" default="zoomlet1" />
+    <arg name="use_sim_time" default="true" />
+    <arg name="is_ignition" default="true" />
+    <arg name="gz_spawn" default="false" />
+
+    <include file="$(find-pkg-share zoomlet_description)/launch/spawn_robot.launch.py">
+        <arg name="namespace" value="$(var namespace1)" />
+        <arg name="use_rviz" value="true" />
+        <arg name="use_sim_time" value="$(var use_sim_time)" />
+        <arg name="is_ignition" value="$(var is_ignition)" />
+        <arg name="gz_spawn" value="$(var gz_spawn)" />
+    </include>
+
+    <timer period="1.0">
+        <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui"
+            exec="joint_state_publisher_gui" namespace="$(var namespace1)" output="screen">
+            <!-- <param name="use_sim_time" value="$(var use_sim_time)" /> --> <!-- NOT
+            needed -->
+            <remap from="/tf" to="tf" />
+            <remap from="/tf_static" to="tf_static" />
+        </node>
+    </timer>
+
+</launch>
