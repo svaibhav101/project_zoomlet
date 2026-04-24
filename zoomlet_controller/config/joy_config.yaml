@@ -1,0 +1,36 @@
+/**:
+  joystick:
+    ros__parameters:
+      device_id: 0
+      device_name: ""
+      # deadzone: 0.5
+      deadzone: 0.1
+      autorepeat_rate: 20.0
+      sticky_buttons: false
+      coalesce_interval_ms: 1
+      use_sim_time: true
+
+  joy_teleop:
+    ros__parameters:
+      use_sim_time: true
+      move:
+        type: topic
+        interface_type: geometry_msgs/msg/TwistStamped
+        topic_name: diffdrive_controller/cmd_vel
+        deadman_buttons: [5]
+
+        axis_mappings:
+          twist-linear-x:
+            axis: 1
+            # scale: 1.0
+            scale: 0.6
+            offset: 0.0
+          twist-angular-z:
+            axis: 3
+            # scale: 1.0
+            scale: 1.2
+            offset: 0.0
+            
+        # Ensure the node populates a valid header
+        publish_header: true
+        header_frame_id: "base_footprint"
