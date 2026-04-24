@@ -42,20 +42,37 @@ Zoomlet is a minimal but complete mobile robot stack built on ROS 2 and `ros2_co
 | Caster radius | 0.05 m |
 | Max linear velocity | 0.46 m/s |
 | Max angular velocity | 1.9 rad/s |
-| Max linear acceleration | 0.9 m/s² |
-| Max angular acceleration | 7.725 rad/s² |
+| Max linear acceleration | 0.9 m/s<sup>2</sup> |
+| Max angular acceleration | 7.725 rad/s<sup>2</sup> |
 
 ---
 
 ## Dependencies
 
-- ROS 2 (Humble or Jazzy)
-- Gazebo (Ignition for Humble, Gazebo Sim for Jazzy)
-- `ros_gz_sim`, `ros_gz_bridge`
-- `gz_ros2_control`
-- `diff_drive_controller`, `joint_state_broadcaster`, `velocity_controllers`
-- `joy`, `joy_teleop`
-- `robot_state_publisher`, `rviz2`, `xacro`
+### System Requirements
+- **Ubuntu 22.04 LTS**/ 
+- **ROS 2 Humble Hawksbill**
+- **Gazebo Ignition** 
+- **colcon** build system
+
+
+### Install Dependencies
+```bash
+sudo apt install -y ros-humble-xacro \
+                                    ros-humble-rviz2 \ 
+                                    ros-humble-ros_gz_sim \ 
+                                    ros-humble-robot_state_publisher \ 
+                                    ros-humble-joint_state_publisher \ 
+                                    ros-humble-joint_state_publisher_gui \ 
+                                    ros-humble-ros_gz_bridge \
+                                    ros-humble-gz_ros2_control \
+                                    ros-humble-diff_drive_controller \ 
+                                    ros-humble-joint_state_broadcaster \ 
+                                    ros-humble-velocity_controllers \
+                                    ros-humble-joy \ 
+                                    ros-humble-joy_teleop 
+```
+
 
 ## Architecture
 <p align="center">
